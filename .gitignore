@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# Deployment details (origin host, SSH user, absolute paths).
+# The site is behind Cloudflare; publishing the origin address would defeat that.
+docs/DEPLOY.local.md
+*.local.md
+
+# Local tooling
+.playwright-mcp/
