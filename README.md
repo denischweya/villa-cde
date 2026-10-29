@@ -29,14 +29,13 @@ assets/video/           villa-hero.webm   31.5 s muted loop, VP9, 1280x720   (pr
 
 | Key | What it does |
 |---|---|
-| `airbnbUrl` | Applied to every link marked `data-airbnb` |
 | `maxGuests` | "Max guests" counter and the guest field's max |
-| `nightlyRate` | Drives the live estimate (nights × rate) in the booking form |
-| `currency` | Label used in the estimate |
+| `nightlyRate` | No longer shown on the page — only used to compute the estimate in the WhatsApp message sent to the villa owner |
+| `currency` | Currency label used in that WhatsApp estimate line |
 
-The rate appears in **three** hardcoded places in `index.html` as well as in
-`CONFIG.nightlyRate`: the stats bar ("From KES 65,000"), the booking panel's Rate
-row, and the `#est-total` placeholder. Change all four together.
+There's no Airbnb listing for this villa, so no Airbnb links appear anywhere
+on the site. Pricing isn't shown publicly either; guests get a quote over
+WhatsApp after submitting the booking form.
 
 ## Design tokens
 
@@ -50,7 +49,7 @@ row, and the `#est-total` placeholder. Change all four together.
 
 - **Reviews: the six quotes in `#reviews-track` are written samples, not real guests.**
   So are the `4.9` rating and the `38 reviews` count beside them. Replace all of it with
-  verbatim quotes and the true figures from your Airbnb listing before the site goes live.
+  verbatim quotes and the true figures from real guest reviews before the site goes live.
   There is a comment in the markup saying the same thing.
 - Booking: check-in and check-out times, minimum stay, response time
 - **Room names and bed types are working values.** The six cards in `#rooms` are named
@@ -139,5 +138,5 @@ is a no-op. Run it before every deploy.
 **Before this stops being a demo:** the vhost sends
 `X-Robots-Tag: noindex, nofollow, noarchive` on every response, because the guest
 reviews are written samples and the 4.9 / 38 figures are invented. Replace them
-with real Airbnb content, then drop the `X-Robots-Tag` lines from the vhost and
+with real guest content, then drop the `X-Robots-Tag` lines from the vhost and
 reload nginx.

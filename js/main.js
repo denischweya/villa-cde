@@ -4,7 +4,6 @@
 
   /* ---------- Site settings: edit these ---------- */
   var CONFIG = {
-    airbnbUrl: 'https://www.airbnb.com/', // paste the listing URL here
     maxGuests: 14,                         // counter + guest field limit
     nightlyRate: 65000,                    // KES, used only for the WhatsApp message estimate (not shown on the page)
     currency: 'KES',
@@ -14,9 +13,6 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* ---------- Airbnb links ---------- */
-  $$('a[data-airbnb]').forEach(function (a) { a.href = CONFIG.airbnbUrl; });
 
   /* ---------- Mobile nav ---------- */
   var navToggle = $('#nav-toggle');
