@@ -4,7 +4,7 @@
 
   /* ---------- Site settings: edit these ---------- */
   var CONFIG = {
-    maxGuests: 14,                         // counter + guest field limit
+    maxGuests: 12,                         // counter + guest field limit
     nightlyRate: 65000,                    // KES, used only for the WhatsApp message estimate (not shown on the page)
     currency: 'KES',
     whatsappNumber: '254713234606'         // digits only, no "+" — wa.me recipient
