@@ -75,7 +75,7 @@ dashboard under Scrape Shield if you want the raw address in the HTML.
 
 ## Booking form
 
-The form is front end only. It validates the dates, shows the estimate and displays a confirmation. To make it work, connect `submitBooking()` in `js/main.js` to a backend. The payload includes `nights` and `estimate`.
+The form is front end only — no backend. It validates the dates, shows the estimate, then hands the request to WhatsApp: `submitBooking()` in `js/main.js` opens `wa.me/<CONFIG.whatsappNumber>` with the booking details pre-filled as the message text, and the visitor taps send themselves. Change the recipient via `CONFIG.whatsappNumber` (digits only, no `+`). The payload includes `nights` and `estimate`.
 
 ## Notes
 

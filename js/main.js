@@ -7,7 +7,8 @@
     airbnbUrl: 'https://www.airbnb.com/', // paste the listing URL here
     maxGuests: 14,                         // counter + guest field limit
     nightlyRate: 65000,                    // KES, drives the booking estimate
-    currency: 'KES'
+    currency: 'KES',
+    whatsappNumber: '254713234606'         // digits only, no "+" — wa.me recipient
   };
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -463,10 +464,25 @@
     }
   }
 
-  /* Wire this to your backend (Laravel/PHP endpoint, Formspree, or a wa.me link). */
+  /* No backend behind this form — it hands the request to WhatsApp instead.
+     The visitor still has to tap send in WhatsApp; wa.me can only pre-fill. */
+  function buildWhatsAppMessage(data) {
+    var lines = [
+      'New booking request — Villa CDE',
+      '',
+      'Name: ' + data.name,
+      'Dates: ' + data.check_in + ' → ' + data.check_out + ' (' + data.nights + (data.nights === 1 ? ' night' : ' nights') + ')',
+      'Guests: ' + data.guests,
+      'Estimate: ' + money(data.estimate)
+    ];
+    if (data.phone) lines.push('Phone: ' + data.phone);
+    if (data.message) lines.push('Occasion/requests: ' + data.message);
+    return lines.join('\n');
+  }
+
   function submitBooking(data) {
-    // return fetch('/api/booking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-    console.info('Booking request', data);
+    var url = 'https://wa.me/' + CONFIG.whatsappNumber + '?text=' + encodeURIComponent(buildWhatsAppMessage(data));
+    window.open(url, '_blank', 'noopener');
     return Promise.resolve();
   }
 
