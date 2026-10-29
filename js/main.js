@@ -6,7 +6,7 @@
   var CONFIG = {
     airbnbUrl: 'https://www.airbnb.com/', // paste the listing URL here
     maxGuests: 14,                         // counter + guest field limit
-    nightlyRate: 65000,                    // KES, drives the booking estimate
+    nightlyRate: 65000,                    // KES, used only for the WhatsApp message estimate (not shown on the page)
     currency: 'KES',
     whatsappNumber: '254713234606'         // digits only, no "+" — wa.me recipient
   };
@@ -285,7 +285,6 @@
       drIn.value = drStart ? iso(drStart) : '';
       drOut.value = drEnd ? iso(drEnd) : '';
       $('.dr-field').classList.remove('is-invalid');
-      updateEstimate();
     }
 
     function monthHTML(base) {
@@ -435,33 +434,20 @@
       var t = markFocus(); if (t) t.focus();
     });
 
-    /* NB: the first paint is triggered from the booking-form init below, because
-       paintField -> updateEstimate -> nights() needs `form`, which is assigned there. */
     window.__drPaint = paintField;
     window.__drReset = function () { drStart = drEnd = drHover = null; closeCal(false); paintField(); };
     window.__drCount = drCount;
     window.__drInvalid = function () { $('.dr-field').classList.add('is-invalid'); drTrigger.focus(); };
   }
 
-  /* ---------- Booking form + live estimate ---------- */
+  /* ---------- Booking form ---------- */
   var form = $('#booking-form'), thanks = $('#booking-thanks'), reset = $('#booking-reset');
-  var estLabel = $('#est-label'), estTotal = $('#est-total');
   function money(v) { return CONFIG.currency + ' ' + Math.round(v).toLocaleString('en-US'); }
   function nights() {
     var ci = form.elements.check_in.value, co = form.elements.check_out.value;
     if (!ci || !co) return 0;
     var d = (new Date(co) - new Date(ci)) / 86400000;
     return d > 0 ? Math.round(d) : 0;
-  }
-  function updateEstimate() {
-    var n = nights();
-    if (n > 0) {
-      estLabel.textContent = n + (n === 1 ? ' night' : ' nights') + ' × ' + money(CONFIG.nightlyRate);
-      estTotal.textContent = money(n * CONFIG.nightlyRate);
-    } else {
-      estLabel.textContent = 'Choose dates to see your estimate';
-      estTotal.textContent = money(CONFIG.nightlyRate) + ' / night';
-    }
   }
 
   /* No backend behind this form — it hands the request to WhatsApp instead.
@@ -487,9 +473,8 @@
   }
 
   if (form) {
-    /* check_in / check_out are hidden inputs now; the range picker owns them.
-       Painting the field here also produces the first estimate. */
-    if (window.__drPaint) window.__drPaint(); else updateEstimate();
+    /* check_in / check_out are hidden inputs now; the range picker owns them. */
+    if (window.__drPaint) window.__drPaint();
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -512,7 +497,7 @@
   if (reset) {
     reset.addEventListener('click', function () {
       form.reset();
-      if (window.__drReset) window.__drReset(); else updateEstimate();
+      if (window.__drReset) window.__drReset();
       thanks.hidden = true;
       form.hidden = false;
     });
